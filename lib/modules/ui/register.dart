@@ -4,6 +4,7 @@ import 'package:flutter_app_first_project/modules/Pages/signIn.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'home.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -11,8 +12,10 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String _email, _password, _password2;
+
+  final dbRef = FirebaseDatabase.instance.reference();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _email, _password, _password2;
 
   @override
   Widget build(BuildContext context) {
@@ -132,12 +135,16 @@ class _RegisterPageState extends State<RegisterPage> {
     if (formState.validate()) {
       formState.save();
       try {
-        AuthResult result = await FirebaseAuth.instance
+       /* AuthResult result = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: _email, password: _password);
         FirebaseUser user = result.user;
         user.sendEmailVerification();
         pr.hide();
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));*/
+
+        dbRef.child("1").set({
+          'id': _email
+        });
       } catch (e) {
         print(e.toString());
         pr.hide();
